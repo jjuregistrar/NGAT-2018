@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JJU Exit Exam Placement Announcement</title>
+  <style>
+    body {
+      font-family: "Times New Roman", Times, serif;
+      margin: 0;
+      padding: 20px;
+      background: #f8f8f8;
+    }
+
+    .card {
+      background: white;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    h2,h1 {
+      text-align: center;
+      color: blue;
+      margin-bottom: 5px;
+    }
+
+    .green {
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .pink {
+      text-align: center;
+      color: deeppink;
+      font-weight: bold;
+    }
+
+    .field-label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .red {
+      color: red;
+      font-weight: bold;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="https://i.ibb.co/1GhdVfSc/Logo.png" width="80" />
+    <h1 class="blue">Jigjiga University</h1>
+    <h2 class="green">Registrar and Alumni Directorate</h2>
+   <h3 class="pink">Sene 2–10, 2017 E.C.<br />Exit Exam Placement Announcement</h3>
+
+    <input type="text" id="usernameInput" placeholder="Enter username (e.g., EUEE00000017)" />
+    <button onclick="searchStudent()">Search</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const csvUrl = 'data.csv'; // ✅ Replace if needed
+    let students = [];
+
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(text => {
+        const lines = text.trim().split('\n');
+        for (let i = 1; i < lines.length; i++) {
+          const [sno, username, name, password, examDate, building, room, time, dept] = lines[i].split(',');
+          students.push({ sno, username, name, password, examDate, building, room, time, dept });
+        }
+      });
+
+    function searchStudent() {
+      const input = document.getElementById('usernameInput').value.trim().toLowerCase();
+      const resultDiv = document.getElementById('result');
+      const student = students.find(s => s.username.toLowerCase() === input);
+
+      if (student) {
+        resultDiv.innerHTML = `
+          <p><span class="field-label">Student Name:</span> ${student.name}</p>
+          <p><span class="field-label">Username:</span> ${student.username}</p>
+          <p><span class="field-label">Password:</span> ${student.password}</p>
+          <p><span class="field-label">Exam Date:</span> ${student.examDate}</p>
+          <p><span class="field-label">Department (Exam Topic):</span> ${student.dept}</p>
+          <p><span class="field-label">Exam Building:</span> ${student.building}</p>
+          <p><span class="field-label">Exam Room:</span> ${student.room}</p>
+          <p class="red"><span class="field-label">Exam Time:</span> ${student.time}</p>
+        `;
+      } else {
+        resultDiv.innerHTML = `<p class="red">No student found with that username.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
