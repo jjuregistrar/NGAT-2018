@@ -82,9 +82,9 @@
     <img src="https://i.ibb.co/1GhdVfSc/Logo.png" width="80" />
     <h1 class="blue">Jigjiga University</h1>
     <h2 class="green">Registrar and Alumni Directorate</h2>
-   <h3 class="pink">Sene 2–10, 2017 E.C.<br />Exit Exam Placement Announcement</h3>
+   <h3 class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</h3>
 
-    <input type="text" id="usernameInput" placeholder="Enter username (e.g., EUEE00000017)" />
+    <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
     <button onclick="searchStudent()">Search</button>
 
     <div id="result"></div>
@@ -99,8 +99,8 @@
       .then(text => {
         const lines = text.trim().split('\n');
         for (let i = 1; i < lines.length; i++) {
-          const [sno, username, name, password, examDate, building, room, time, dept] = lines[i].split(',');
-          students.push({ sno, username, name, password, examDate, building, room, time, dept });
+          const [username, name, gender, examDate, building, room, time, session] = lines[i].split(',');
+          students.push({username, name, gender, examDate, building, room, time, session });
         }
       });
 
@@ -111,17 +111,17 @@
 
       if (student) {
         resultDiv.innerHTML = `
-          <p><span class="field-label">Student Name:</span> ${student.name}</p>
+          <p><span class="field-label">Examinee Name:</span> ${student.name}</p>
           <p><span class="field-label">Username:</span> ${student.username}</p>
-          <p><span class="field-label">Password:</span> ${student.password}</p>
+          <p><span class="field-label">Gender:</span> ${student.gender}</p>
           <p><span class="field-label">Exam Date:</span> ${student.examDate}</p>
-          <p><span class="field-label">Department (Exam Topic):</span> ${student.dept}</p>
+          <p><span class="field-label">Session:</span> ${student.session}</p>
           <p><span class="field-label">Exam Building:</span> ${student.building}</p>
           <p><span class="field-label">Exam Room:</span> ${student.room}</p>
           <p class="red"><span class="field-label">Exam Time:</span> ${student.time}</p>
         `;
       } else {
-        resultDiv.innerHTML = `<p class="red">No student found with that username.</p>`;
+        resultDiv.innerHTML = `<p class="red">No examinee found with this username!</p>`;
       }
     }
   </script>
