@@ -99,7 +99,7 @@
       .then(text => {
         const lines = text.trim().split('\n');
         for (let i = 1; i < lines.length; i++) {
-          const [username, name, gender, examDate, building, room, time, session] = lines[i].split(',');
+          const [username, name, gender, examDate, building, room, time, session] = lines[i].split('\t');
           students.push({username, name, gender, examDate, building, room, time, session });
         }
       });
