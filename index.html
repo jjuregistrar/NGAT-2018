@@ -9,11 +9,12 @@
       font-family: "Times New Roman", Times, serif;
       margin: 0;
       padding: 20px;
-      background: #f8f8f8;
+      background: #f8f8f8 url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fp%2FJigjiga-University-100068560924166%2F&psig=AOvVaw01XsxNuE3o-7AVBouop5Hm&ust=1760892718879000&source=images&cd=vfe&opi=89978449&ved=2ahUKEwiz457Zmq6QAxWsSEEAHV3IKRgQjRx6BAgAEBo') no-repeat center center fixed;
+      background-size: cover;
     }
 
     .card {
-      background: white;
+      background: rgba(255, 255, 255, 0.95);
       max-width: 500px;
       margin: auto;
       padding: 20px;
@@ -26,7 +27,13 @@
       margin: 0 auto 10px;
     }
 
-    h2,h1 {
+    h1 {
+      text-align: center;
+      color: blue;
+      margin-bottom: 5px;
+    }
+
+    h2 {
       text-align: center;
       color: blue;
       margin-bottom: 5px;
@@ -55,6 +62,7 @@
       margin: 15px 0;
       border: 1px solid #ccc;
       border-radius: 5px;
+      box-sizing: border-box;
     }
 
     button {
@@ -65,6 +73,12 @@
       border: none;
       border-radius: 5px;
       font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
     }
 
     .red {
@@ -74,15 +88,19 @@
 
     #result {
       margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border-left: 4px solid #007bff;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <img src="https://i.ibb.co/1GhdVfSc/Logo.png" width="80" />
-    <h1 class="blue">Jigjiga University</h1>
+    <img src="https://i.ibb.co/1GhdVfSc/Logo.png" width="80" alt="Jigjiga University Logo" />
+    <h1>Jigjiga University</h1>
     <h2 class="green">Registrar and Alumni Directorate</h2>
-   <h3 class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</h3>
+    <h3 class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</h3>
 
     <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
     <button onclick="searchStudent()">Search</button>
@@ -91,18 +109,39 @@
   </div>
 
   <script>
-    const csvUrl = 'data.csv'; // ✅ Replace if needed
-    let students = [];
-
-    fetch(csvUrl)
-      .then(response => response.text())
-      .then(text => {
-        const lines = text.trim().split('\n');
-        for (let i = 1; i < lines.length; i++) {
-          const [username, name, gender, examDate, building, room, time, session] = lines[i].split('\t');
-          students.push({username, name, gender, examDate, building, room, time, session });
-        }
-      });
+    // Sample data for demonstration
+    const students = [
+      {
+        username: "NGAT00000018",
+        name: "Ahmed Mohammed",
+        gender: "Male",
+        examDate: "October 15, 2024",
+        building: "Science Building",
+        room: "Room 101",
+        time: "9:00 AM - 11:00 AM",
+        session: "Morning"
+      },
+      {
+        username: "NGAT00000019",
+        name: "Fatima Hassan",
+        gender: "Female",
+        examDate: "October 15, 2024",
+        building: "Science Building",
+        room: "Room 102",
+        time: "9:00 AM - 11:00 AM",
+        session: "Morning"
+      },
+      {
+        username: "NGAT00000020",
+        name: "Mohammed Ali",
+        gender: "Male",
+        examDate: "October 15, 2024",
+        building: "Main Building",
+        room: "Room 201",
+        time: "2:00 PM - 4:00 PM",
+        session: "Afternoon"
+      }
+    ];
 
     function searchStudent() {
       const input = document.getElementById('usernameInput').value.trim().toLowerCase();
@@ -124,6 +163,13 @@
         resultDiv.innerHTML = `<p class="red">No examinee found with this username!</p>`;
       }
     }
+
+    // Add Enter key functionality
+    document.getElementById('usernameInput').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        searchStudent();
+      }
+    });
   </script>
 </body>
 </html>
