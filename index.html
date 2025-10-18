@@ -140,6 +140,13 @@
             color: #666;
             text-align: center;
         }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -151,6 +158,8 @@
 
         <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
         <button onclick="searchStudent()">Search</button>
+        
+        <div class="loading" id="loadingIndicator">Loading data...</div>
 
         <div id="result"></div>
         
@@ -160,53 +169,113 @@
     </div>
 
     <script>
-        // Sample student data
-        const students = [
-            {
-                username: "NGAT00000018",
-                name: "Ahmed Mohammed",
-                gender: "Male",
-                examDate: "October 15, 2024",
-                building: "Science Building",
-                room: "Room 101",
-                time: "9:00 AM - 11:00 AM",
-                session: "Morning"
-            },
-            {
-                username: "NGAT00000019",
-                name: "Fatima Hassan",
-                gender: "Female",
-                examDate: "October 15, 2024",
-                building: "Science Building",
-                room: "Room 102",
-                time: "9:00 AM - 11:00 AM",
-                session: "Morning"
-            },
-            {
-                username: "NGAT00000020",
-                name: "Mohammed Ali",
-                gender: "Male",
-                examDate: "October 15, 2024",
-                building: "Main Building",
-                room: "Room 201",
-                time: "2:00 PM - 4:00 PM",
-                session: "Afternoon"
-            },
-            {
-                username: "NGAT00000021",
-                name: "Aisha Omar",
-                gender: "Female",
-                examDate: "October 16, 2024",
-                building: "Technology Building",
-                room: "Room 305",
-                time: "10:00 AM - 12:00 PM",
-                session: "Morning"
+        // Global variable to store student data
+        let students = [];
+        let dataLoaded = false;
+
+        // Function to load CSV data
+        async function loadCSVData() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                loadingIndicator.style.display = 'block';
+                resultDiv.innerHTML = '';
+                
+                // Fetch the CSV file
+                const response = await fetch('data.csv');
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                
+                // Parse CSV data
+                const lines = csvText.trim().split('\n');
+                
+                // Skip header row and process each line
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        // Split by comma (adjust delimiter if needed)
+                        const [username, name, gender, examDate, building, room, time, session] = line.split(',');
+                        
+                        if (username && name) {
+                            students.push({
+                                username: username.trim(),
+                                name: name.trim(),
+                                gender: gender ? gender.trim() : 'Not specified',
+                                examDate: examDate ? examDate.trim() : 'Not specified',
+                                building: building ? building.trim() : 'Not specified',
+                                room: room ? room.trim() : 'Not specified',
+                                time: time ? time.trim() : 'Not specified',
+                                session: session ? session.trim() : 'Not specified'
+                            });
+                        }
+                    }
+                }
+                
+                dataLoaded = true;
+                loadingIndicator.style.display = 'none';
+                resultDiv.innerHTML = `<p style="color: green;">Data loaded successfully. ${students.length} records available.</p>`;
+                
+            } catch (error) {
+                console.error('Error loading CSV data:', error);
+                loadingIndicator.style.display = 'none';
+                resultDiv.innerHTML = `<p class="red">Error loading data: ${error.message}</p>`;
+                
+                // Fallback to sample data if CSV loading fails
+                loadSampleData();
+                resultDiv.innerHTML += `<p style="color: orange;">Using sample data instead.</p>`;
             }
-        ];
+        }
+
+        // Fallback function with sample data
+        function loadSampleData() {
+            students = [
+                {
+                    username: "NGAT00000018",
+                    name: "Ahmed Mohammed",
+                    gender: "Male",
+                    examDate: "October 15, 2024",
+                    building: "Science Building",
+                    room: "Room 101",
+                    time: "9:00 AM - 11:00 AM",
+                    session: "Morning"
+                },
+                {
+                    username: "NGAT00000019",
+                    name: "Fatima Hassan",
+                    gender: "Female",
+                    examDate: "October 15, 2024",
+                    building: "Science Building",
+                    room: "Room 102",
+                    time: "9:00 AM - 11:00 AM",
+                    session: "Morning"
+                },
+                {
+                    username: "NGAT00000020",
+                    name: "Mohammed Ali",
+                    gender: "Male",
+                    examDate: "October 15, 2024",
+                    building: "Main Building",
+                    room: "Room 201",
+                    time: "2:00 PM - 4:00 PM",
+                    session: "Afternoon"
+                }
+            ];
+            dataLoaded = true;
+        }
 
         function searchStudent() {
             const input = document.getElementById('usernameInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('result');
+            
+            if (!dataLoaded) {
+                resultDiv.innerHTML = `<p class="red">Data is still loading. Please try again in a moment.</p>`;
+                return;
+            }
             
             if (!input) {
                 resultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
@@ -236,6 +305,11 @@
             if (event.key === 'Enter') {
                 searchStudent();
             }
+        });
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCSVData();
         });
     </script>
 </body>
