@@ -13,57 +13,116 @@
         
         body {
             font-family: "Times New Roman", Times, serif;
-            background: 
-                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-                url('https://i.ibb.co/1f6MRJYF/Background1.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: #f8f8f8;
             padding: 20px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced background with depth */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url('https://i.ibb.co/1f6MRJYF/Background1.jpg') no-repeat center center;
+            background-size: cover;
+            /* Depth enhancement filters */
+            filter: brightness(0.9) contrast(1.15) saturate(1.1);
+            z-index: -2;
+        }
+
+        /* Additional depth layers */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                /* Subtle vignette effect */
+                radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%),
+                /* Subtle light spots */
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
         }
         
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             max-width: 500px;
             width: 100%;
             margin: auto;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            /* Enhanced shadow for depth perception */
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
             text-align: center;
+            position: relative;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Subtle inner shadow for more depth */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 8px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            z-index: -1;
         }
         
         .logo {
             display: block;
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
             width: 80px;
             height: 80px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
         
         h1 {
             text-align: center;
             color: blue;
-            margin-bottom: 5px;
-            font-size: 24px;
+            margin-bottom: 8px;
+            font-size: 26px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         h2 {
             text-align: center;
             color: green;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-size: 18px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
         
         .pink {
             text-align: center;
             color: deeppink;
             font-weight: bold;
-            margin: 15px 0;
-            font-size: 16px;
+            margin: 20px 0;
+            font-size: 17px;
             line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
         
         .field-label {
@@ -75,34 +134,75 @@
         
         input[type="text"] {
             width: 100%;
-            padding: 12px;
-            margin: 15px 0;
+            padding: 14px;
+            margin: 18px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
             font-family: "Times New Roman", Times, serif;
             font-size: 16px;
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.1),
+                0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 
+                inset 0 2px 6px rgba(0, 123, 255, 0.2),
+                0 0 0 3px rgba(0, 123, 255, 0.1);
         }
         
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #007bff;
+            padding: 14px;
+            background: linear-gradient(to bottom, #007bff, #0056b3);
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 17px;
             font-family: "Times New Roman", Times, serif;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 8px rgba(0, 123, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 12px rgba(0, 123, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover::before {
+            left: 100%;
         }
         
-        button:hover {
-            background-color: #0056b3;
+        button:active {
+            transform: translateY(0);
         }
         
         button:disabled {
-            background-color: #cccccc;
+            background: linear-gradient(to bottom, #cccccc, #aaaaaa);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .red {
@@ -116,17 +216,21 @@
         }
         
         #result {
-            margin-top: 20px;
+            margin-top: 25px;
             text-align: left;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            padding: 20px;
+            background: rgba(249, 249, 249, 0.8);
+            border-radius: 10px;
             border-left: 4px solid #007bff;
+            box-shadow: 
+                inset 0 0 10px rgba(0, 0, 0, 0.05),
+                0 2px 8px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(3px);
         }
         
         .result-item {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
             border-bottom: 1px dashed #ddd;
         }
         
@@ -137,24 +241,27 @@
         }
         
         .footer {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 14px;
             color: #666;
             text-align: center;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
         }
         
         .loading {
             display: none;
             text-align: center;
-            margin: 10px 0;
+            margin: 15px 0;
             color: #007bff;
+            font-weight: bold;
         }
         
         .instructions {
             font-size: 14px;
             color: #666;
-            margin: 10px 0;
+            margin: 15px 0;
             text-align: center;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
