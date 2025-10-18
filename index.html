@@ -15,7 +15,7 @@
             font-family: "Times New Roman", Times, serif;
             background: 
                 linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-                url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80') no-repeat center center fixed;
+                url('https://ibb.co/PZQM1zsq') no-repeat center center fixed;
             background-size: cover;
             padding: 20px;
             min-height: 100vh;
@@ -108,6 +108,11 @@
             background-color: #0056b3;
         }
         
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
         .red {
             color: red;
             font-weight: bold;
@@ -153,14 +158,11 @@
             color: #007bff;
         }
         
-        .debug-info {
-            font-size: 12px;
+        .instructions {
+            font-size: 14px;
             color: #666;
-            margin-top: 10px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 5px;
-            text-align: left;
+            margin: 10px 0;
+            text-align: center;
         }
     </style>
 </head>
@@ -171,81 +173,71 @@
         <h2>Registrar and Alumni Directorate</h2>
         <div class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</div>
 
-        <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
-        <button onclick="searchStudent()">Search</button>
+        <div class="instructions">Enter your username to find your exam placement details</div>
         
-        <div class="loading" id="loadingIndicator">Loading data...</div>
+        <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
+        <button id="searchButton" onclick="searchStudent()">Search</button>
+        
+        <div class="loading" id="loadingIndicator">Searching for student information...</div>
 
         <div id="result"></div>
         
         <div class="footer">
             For assistance, contact the Registrar Office
         </div>
-        
-        <div class="debug-info" id="debugInfo"></div>
     </div>
 
     <script>
-        // Global variable to store student data
-        let students = [];
-        let dataLoaded = false;
-
-        // Function to load CSV data
-        async function loadCSVData() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
+        async function searchStudent() {
+            const input = document.getElementById('usernameInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('result');
-            const debugInfo = document.getElementById('debugInfo');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const searchButton = document.getElementById('searchButton');
+            
+            // Clear previous results
+            resultDiv.innerHTML = '';
+            
+            if (!input) {
+                resultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
+                return;
+            }
+            
+            // Show loading indicator and disable button
+            loadingIndicator.style.display = 'block';
+            searchButton.disabled = true;
+            searchButton.textContent = 'Searching...';
             
             try {
-                loadingIndicator.style.display = 'block';
-                resultDiv.innerHTML = '';
-                debugInfo.innerHTML = 'Attempting to load data.csv...';
-                
                 // Fetch the CSV file
                 const response = await fetch('data.csv');
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
                 }
                 
                 const csvText = await response.text();
-                debugInfo.innerHTML += `<br>✓ CSV file loaded successfully (${csvText.length} characters)`;
-                debugInfo.innerHTML += `<br>First 200 characters: "${csvText.substring(0, 200)}..."`;
                 
-                // Parse CSV data
+                // Parse CSV data and find the specific student
                 const lines = csvText.trim().split('\n');
-                debugInfo.innerHTML += `<br>✓ Found ${lines.length} lines in CSV`;
+                let studentFound = null;
                 
-                // Display header row for debugging
-                if (lines.length > 0) {
-                    debugInfo.innerHTML += `<br>Header row: "${lines[0]}"`;
-                }
-                
-                // Process each line (skip header row)
+                // Search for the student with the matching username
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (line) {
-                        debugInfo.innerHTML += `<br>Processing line ${i}: "${line}"`;
-                        
                         // Try different delimiters
                         let fields;
                         if (line.includes('\t')) {
-                            // Tab-delimited
                             fields = line.split('\t');
-                            debugInfo.innerHTML += `<br>Using tab delimiter - found ${fields.length} fields`;
                         } else if (line.includes(',')) {
-                            // Comma-delimited
                             fields = line.split(',');
-                            debugInfo.innerHTML += `<br>Using comma delimiter - found ${fields.length} fields`;
                         } else {
-                            // Space or other delimiter
                             fields = line.split(/\s+/);
-                            debugInfo.innerHTML += `<br>Using space delimiter - found ${fields.length} fields`;
                         }
                         
-                        // Map fields to student object
-                        if (fields.length >= 2) {
-                            const student = {
+                        // Check if this is the student we're looking for
+                        if (fields.length >= 2 && fields[0].trim().toUpperCase() === input) {
+                            studentFound = {
                                 username: fields[0] ? fields[0].trim() : 'Unknown',
                                 name: fields[1] ? fields[1].trim() : 'Unknown',
                                 gender: fields[2] ? fields[2].trim() : 'Not specified',
@@ -255,35 +247,60 @@
                                 time: fields[6] ? fields[6].trim() : 'Not specified',
                                 session: fields[7] ? fields[7].trim() : 'Not specified'
                             };
-                            
-                            students.push(student);
-                            debugInfo.innerHTML += `<br>✓ Added student: ${student.username} - ${student.name}`;
+                            break; // Stop searching once we found the student
                         }
                     }
                 }
                 
-                dataLoaded = true;
-                loadingIndicator.style.display = 'none';
-                resultDiv.innerHTML = `<p class="green">Data loaded successfully. ${students.length} student records available.</p>`;
-                debugInfo.innerHTML += `<br><br>✓ Data loading complete. Total students: ${students.length}`;
+                // Display results
+                if (studentFound) {
+                    resultDiv.innerHTML = `
+                        <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
+                        <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
+                        <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                        <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
+                        <div class="result-item"><span class="field-label">Session:</span> ${studentFound.session}</div>
+                        <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
+                        <div class="result-item"><span class="field-label">Exam Room:</span> ${studentFound.room}</div>
+                        <div class="result-item red"><span class="field-label">Exam Time:</span> ${studentFound.time}</div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
+                }
                 
             } catch (error) {
-                console.error('Error loading CSV data:', error);
-                loadingIndicator.style.display = 'none';
-                resultDiv.innerHTML = `<p class="red">Error loading data: ${error.message}</p>`;
-                debugInfo.innerHTML += `<br>❌ Error: ${error.message}`;
+                console.error('Error searching for student:', error);
+                resultDiv.innerHTML = `<p class="red">Error searching for student: ${error.message}</p>`;
                 
                 // Fallback to sample data if CSV loading fails
-                loadSampleData();
-                resultDiv.innerHTML += `<p style="color: orange;">Using sample data instead.</p>`;
-                debugInfo.innerHTML += `<br>🔄 Using sample data as fallback`;
+                const sampleStudent = getSampleStudent(input);
+                if (sampleStudent) {
+                    resultDiv.innerHTML = `
+                        <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
+                        <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                        <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                        <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
+                        <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
+                        <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
+                        <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
+                        <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
+                        <p style="color: orange; margin-top: 10px;">Note: Using sample data - CSV file not accessible</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
+                }
+            } finally {
+                // Hide loading indicator and re-enable button
+                loadingIndicator.style.display = 'none';
+                searchButton.disabled = false;
+                searchButton.textContent = 'Search';
             }
         }
 
         // Fallback function with sample data
-        function loadSampleData() {
-            students = [
-                {
+        function getSampleStudent(username) {
+            const sampleData = {
+                "NGAT00000018": {
                     username: "NGAT00000018",
                     name: "Ahmed Mohammed",
                     gender: "Male",
@@ -293,7 +310,7 @@
                     time: "9:00 AM - 11:00 AM",
                     session: "Morning"
                 },
-                {
+                "NGAT00000019": {
                     username: "NGAT00000019",
                     name: "Fatima Hassan",
                     gender: "Female",
@@ -303,7 +320,7 @@
                     time: "9:00 AM - 11:00 AM",
                     session: "Morning"
                 },
-                {
+                "NGAT00000020": {
                     username: "NGAT00000020",
                     name: "Mohammed Ali",
                     gender: "Male",
@@ -313,46 +330,9 @@
                     time: "2:00 PM - 4:00 PM",
                     session: "Afternoon"
                 }
-            ];
-            dataLoaded = true;
-        }
-
-        function searchStudent() {
-            const input = document.getElementById('usernameInput').value.trim().toUpperCase();
-            const resultDiv = document.getElementById('result');
-            const debugInfo = document.getElementById('debugInfo');
+            };
             
-            if (!dataLoaded) {
-                resultDiv.innerHTML = `<p class="red">Data is still loading. Please try again in a moment.</p>`;
-                return;
-            }
-            
-            if (!input) {
-                resultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
-                return;
-            }
-            
-            debugInfo.innerHTML += `<br>Searching for username: ${input}`;
-            debugInfo.innerHTML += `<br>Available usernames: ${students.map(s => s.username).join(', ')}`;
-            
-            const student = students.find(s => s.username.toUpperCase() === input);
-
-            if (student) {
-                resultDiv.innerHTML = `
-                    <div class="result-item"><span class="field-label">Examinee Name:</span> ${student.name}</div>
-                    <div class="result-item"><span class="field-label">Username:</span> ${student.username}</div>
-                    <div class="result-item"><span class="field-label">Gender:</span> ${student.gender}</div>
-                    <div class="result-item"><span class="field-label">Exam Date:</span> ${student.examDate}</div>
-                    <div class="result-item"><span class="field-label">Session:</span> ${student.session}</div>
-                    <div class="result-item"><span class="field-label">Exam Building:</span> ${student.building}</div>
-                    <div class="result-item"><span class="field-label">Exam Room:</span> ${student.room}</div>
-                    <div class="result-item red"><span class="field-label">Exam Time:</span> ${student.time}</div>
-                `;
-                debugInfo.innerHTML += `<br>✓ Found student: ${student.name}`;
-            } else {
-                resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
-                debugInfo.innerHTML += `<br>❌ No student found with username: ${input}`;
-            }
+            return sampleData[username] || null;
         }
 
         // Allow searching by pressing Enter key
@@ -360,11 +340,6 @@
             if (event.key === 'Enter') {
                 searchStudent();
             }
-        });
-
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCSVData();
         });
     </script>
 </body>
