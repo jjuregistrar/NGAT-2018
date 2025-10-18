@@ -113,6 +113,11 @@
             font-weight: bold;
         }
         
+        .green {
+            color: green;
+            font-weight: bold;
+        }
+        
         #result {
             margin-top: 20px;
             text-align: left;
@@ -147,6 +152,16 @@
             margin: 10px 0;
             color: #007bff;
         }
+        
+        .debug-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +181,8 @@
         <div class="footer">
             For assistance, contact the Registrar Office
         </div>
+        
+        <div class="debug-info" id="debugInfo"></div>
     </div>
 
     <script>
@@ -177,57 +194,89 @@
         async function loadCSVData() {
             const loadingIndicator = document.getElementById('loadingIndicator');
             const resultDiv = document.getElementById('result');
+            const debugInfo = document.getElementById('debugInfo');
             
             try {
                 loadingIndicator.style.display = 'block';
                 resultDiv.innerHTML = '';
+                debugInfo.innerHTML = 'Attempting to load data.csv...';
                 
                 // Fetch the CSV file
                 const response = await fetch('data.csv');
                 
                 if (!response.ok) {
-                    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 
                 const csvText = await response.text();
+                debugInfo.innerHTML += `<br>✓ CSV file loaded successfully (${csvText.length} characters)`;
+                debugInfo.innerHTML += `<br>First 200 characters: "${csvText.substring(0, 200)}..."`;
                 
                 // Parse CSV data
                 const lines = csvText.trim().split('\n');
+                debugInfo.innerHTML += `<br>✓ Found ${lines.length} lines in CSV`;
                 
-                // Skip header row and process each line
+                // Display header row for debugging
+                if (lines.length > 0) {
+                    debugInfo.innerHTML += `<br>Header row: "${lines[0]}"`;
+                }
+                
+                // Process each line (skip header row)
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (line) {
-                        // Split by comma (adjust delimiter if needed)
-                        const [username, name, gender, examDate, building, room, time, session] = line.split(',');
+                        debugInfo.innerHTML += `<br>Processing line ${i}: "${line}"`;
                         
-                        if (username && name) {
-                            students.push({
-                                username: username.trim(),
-                                name: name.trim(),
-                                gender: gender ? gender.trim() : 'Not specified',
-                                examDate: examDate ? examDate.trim() : 'Not specified',
-                                building: building ? building.trim() : 'Not specified',
-                                room: room ? room.trim() : 'Not specified',
-                                time: time ? time.trim() : 'Not specified',
-                                session: session ? session.trim() : 'Not specified'
-                            });
+                        // Try different delimiters
+                        let fields;
+                        if (line.includes('\t')) {
+                            // Tab-delimited
+                            fields = line.split('\t');
+                            debugInfo.innerHTML += `<br>Using tab delimiter - found ${fields.length} fields`;
+                        } else if (line.includes(',')) {
+                            // Comma-delimited
+                            fields = line.split(',');
+                            debugInfo.innerHTML += `<br>Using comma delimiter - found ${fields.length} fields`;
+                        } else {
+                            // Space or other delimiter
+                            fields = line.split(/\s+/);
+                            debugInfo.innerHTML += `<br>Using space delimiter - found ${fields.length} fields`;
+                        }
+                        
+                        // Map fields to student object
+                        if (fields.length >= 2) {
+                            const student = {
+                                username: fields[0] ? fields[0].trim() : 'Unknown',
+                                name: fields[1] ? fields[1].trim() : 'Unknown',
+                                gender: fields[2] ? fields[2].trim() : 'Not specified',
+                                examDate: fields[3] ? fields[3].trim() : 'Not specified',
+                                building: fields[4] ? fields[4].trim() : 'Not specified',
+                                room: fields[5] ? fields[5].trim() : 'Not specified',
+                                time: fields[6] ? fields[6].trim() : 'Not specified',
+                                session: fields[7] ? fields[7].trim() : 'Not specified'
+                            };
+                            
+                            students.push(student);
+                            debugInfo.innerHTML += `<br>✓ Added student: ${student.username} - ${student.name}`;
                         }
                     }
                 }
                 
                 dataLoaded = true;
                 loadingIndicator.style.display = 'none';
-                resultDiv.innerHTML = `<p style="color: green;">Data loaded successfully. ${students.length} records available.</p>`;
+                resultDiv.innerHTML = `<p class="green">Data loaded successfully. ${students.length} student records available.</p>`;
+                debugInfo.innerHTML += `<br><br>✓ Data loading complete. Total students: ${students.length}`;
                 
             } catch (error) {
                 console.error('Error loading CSV data:', error);
                 loadingIndicator.style.display = 'none';
                 resultDiv.innerHTML = `<p class="red">Error loading data: ${error.message}</p>`;
+                debugInfo.innerHTML += `<br>❌ Error: ${error.message}`;
                 
                 // Fallback to sample data if CSV loading fails
                 loadSampleData();
                 resultDiv.innerHTML += `<p style="color: orange;">Using sample data instead.</p>`;
+                debugInfo.innerHTML += `<br>🔄 Using sample data as fallback`;
             }
         }
 
@@ -271,6 +320,7 @@
         function searchStudent() {
             const input = document.getElementById('usernameInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('result');
+            const debugInfo = document.getElementById('debugInfo');
             
             if (!dataLoaded) {
                 resultDiv.innerHTML = `<p class="red">Data is still loading. Please try again in a moment.</p>`;
@@ -281,6 +331,9 @@
                 resultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
                 return;
             }
+            
+            debugInfo.innerHTML += `<br>Searching for username: ${input}`;
+            debugInfo.innerHTML += `<br>Available usernames: ${students.map(s => s.username).join(', ')}`;
             
             const student = students.find(s => s.username.toUpperCase() === input);
 
@@ -295,8 +348,10 @@
                     <div class="result-item"><span class="field-label">Exam Room:</span> ${student.room}</div>
                     <div class="result-item red"><span class="field-label">Exam Time:</span> ${student.time}</div>
                 `;
+                debugInfo.innerHTML += `<br>✓ Found student: ${student.name}`;
             } else {
                 resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
+                debugInfo.innerHTML += `<br>❌ No student found with username: ${input}`;
             }
         }
 
