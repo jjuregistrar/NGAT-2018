@@ -1,175 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NGAT Placement Announcement</title>
-  <style>
-    body {
-      font-family: "Times New Roman", Times, serif;
-      margin: 0;
-      padding: 20px;
-      background: #f8f8f8 url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fp%2FJigjiga-University-100068560924166%2F&psig=AOvVaw01XsxNuE3o-7AVBouop5Hm&ust=1760892718879000&source=images&cd=vfe&opi=89978449&ved=2ahUKEwiz457Zmq6QAxWsSEEAHV3IKRgQjRx6BAgAEBo') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.95);
-      max-width: 500px;
-      margin: auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .card img {
-      display: block;
-      margin: 0 auto 10px;
-    }
-
-    h1 {
-      text-align: center;
-      color: blue;
-      margin-bottom: 5px;
-    }
-
-    h2 {
-      text-align: center;
-      color: blue;
-      margin-bottom: 5px;
-    }
-
-    .green {
-      text-align: center;
-      color: green;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .pink {
-      text-align: center;
-      color: deeppink;
-      font-weight: bold;
-    }
-
-    .field-label {
-      font-weight: bold;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 15px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .red {
-      color: red;
-      font-weight: bold;
-    }
-
-    #result {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-      border-left: 4px solid #007bff;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGAT Placement Announcement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Times New Roman", Times, serif;
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .card {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        .logo {
+            display: block;
+            margin: 0 auto 15px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: blue;
+            border: 2px solid blue;
+        }
+        
+        h1 {
+            text-align: center;
+            color: blue;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: green;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .pink {
+            text-align: center;
+            color: deeppink;
+            font-weight: bold;
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        
+        .field-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 150px;
+            text-align: left;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 16px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: "Times New Roman", Times, serif;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        .red {
+            color: red;
+            font-weight: bold;
+        }
+        
+        #result {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .result-item {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <img src="https://i.ibb.co/1GhdVfSc/Logo.png" width="80" alt="Jigjiga University Logo" />
-    <h1>Jigjiga University</h1>
-    <h2 class="green">Registrar and Alumni Directorate</h2>
-    <h3 class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</h3>
+    <div class="card">
+        <div class="logo">JJU</div>
+        <h1>Jigjiga University</h1>
+        <h2>Registrar and Alumni Directorate</h2>
+        <div class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</div>
 
-    <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
-    <button onclick="searchStudent()">Search</button>
+        <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
+        <button onclick="searchStudent()">Search</button>
 
-    <div id="result"></div>
-  </div>
+        <div id="result"></div>
+        
+        <div class="footer">
+            For assistance, contact the Registrar Office
+        </div>
+    </div>
 
-  <script>
-    // Sample data for demonstration
-    const students = [
-      {
-        username: "NGAT00000018",
-        name: "Ahmed Mohammed",
-        gender: "Male",
-        examDate: "October 15, 2024",
-        building: "Science Building",
-        room: "Room 101",
-        time: "9:00 AM - 11:00 AM",
-        session: "Morning"
-      },
-      {
-        username: "NGAT00000019",
-        name: "Fatima Hassan",
-        gender: "Female",
-        examDate: "October 15, 2024",
-        building: "Science Building",
-        room: "Room 102",
-        time: "9:00 AM - 11:00 AM",
-        session: "Morning"
-      },
-      {
-        username: "NGAT00000020",
-        name: "Mohammed Ali",
-        gender: "Male",
-        examDate: "October 15, 2024",
-        building: "Main Building",
-        room: "Room 201",
-        time: "2:00 PM - 4:00 PM",
-        session: "Afternoon"
-      }
-    ];
+    <script>
+        // Sample student data
+        const students = [
+            {
+                username: "NGAT00000018",
+                name: "Ahmed Mohammed",
+                gender: "Male",
+                examDate: "October 15, 2024",
+                building: "Science Building",
+                room: "Room 101",
+                time: "9:00 AM - 11:00 AM",
+                session: "Morning"
+            },
+            {
+                username: "NGAT00000019",
+                name: "Fatima Hassan",
+                gender: "Female",
+                examDate: "October 15, 2024",
+                building: "Science Building",
+                room: "Room 102",
+                time: "9:00 AM - 11:00 AM",
+                session: "Morning"
+            },
+            {
+                username: "NGAT00000020",
+                name: "Mohammed Ali",
+                gender: "Male",
+                examDate: "October 15, 2024",
+                building: "Main Building",
+                room: "Room 201",
+                time: "2:00 PM - 4:00 PM",
+                session: "Afternoon"
+            },
+            {
+                username: "NGAT00000021",
+                name: "Aisha Omar",
+                gender: "Female",
+                examDate: "October 16, 2024",
+                building: "Technology Building",
+                room: "Room 305",
+                time: "10:00 AM - 12:00 PM",
+                session: "Morning"
+            }
+        ];
 
-    function searchStudent() {
-      const input = document.getElementById('usernameInput').value.trim().toLowerCase();
-      const resultDiv = document.getElementById('result');
-      const student = students.find(s => s.username.toLowerCase() === input);
+        function searchStudent() {
+            const input = document.getElementById('usernameInput').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('result');
+            
+            if (!input) {
+                resultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
+                return;
+            }
+            
+            const student = students.find(s => s.username.toUpperCase() === input);
 
-      if (student) {
-        resultDiv.innerHTML = `
-          <p><span class="field-label">Examinee Name:</span> ${student.name}</p>
-          <p><span class="field-label">Username:</span> ${student.username}</p>
-          <p><span class="field-label">Gender:</span> ${student.gender}</p>
-          <p><span class="field-label">Exam Date:</span> ${student.examDate}</p>
-          <p><span class="field-label">Session:</span> ${student.session}</p>
-          <p><span class="field-label">Exam Building:</span> ${student.building}</p>
-          <p><span class="field-label">Exam Room:</span> ${student.room}</p>
-          <p class="red"><span class="field-label">Exam Time:</span> ${student.time}</p>
-        `;
-      } else {
-        resultDiv.innerHTML = `<p class="red">No examinee found with this username!</p>`;
-      }
-    }
+            if (student) {
+                resultDiv.innerHTML = `
+                    <div class="result-item"><span class="field-label">Examinee Name:</span> ${student.name}</div>
+                    <div class="result-item"><span class="field-label">Username:</span> ${student.username}</div>
+                    <div class="result-item"><span class="field-label">Gender:</span> ${student.gender}</div>
+                    <div class="result-item"><span class="field-label">Exam Date:</span> ${student.examDate}</div>
+                    <div class="result-item"><span class="field-label">Session:</span> ${student.session}</div>
+                    <div class="result-item"><span class="field-label">Exam Building:</span> ${student.building}</div>
+                    <div class="result-item"><span class="field-label">Exam Room:</span> ${student.room}</div>
+                    <div class="result-item red"><span class="field-label">Exam Time:</span> ${student.time}</div>
+                `;
+            } else {
+                resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
+            }
+        }
 
-    // Add Enter key functionality
-    document.getElementById('usernameInput').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        searchStudent();
-      }
-    });
-  </script>
+        // Allow searching by pressing Enter key
+        document.getElementById('usernameInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchStudent();
+            }
+        });
+    </script>
 </body>
 </html>
