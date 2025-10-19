@@ -397,11 +397,12 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
             border-color: #007bff;
+            background: rgba(0, 123, 255, 0.05);
         }
 
         .exam-option.selected {
             border-color: #007bff;
-            background: rgba(0, 123, 255, 0.05);
+            background: rgba(0, 123, 255, 0.08);
         }
 
         .exam-icon {
@@ -512,6 +513,14 @@
             padding: 15px;
             margin: 15px 0;
             border-left: 4px solid #007bff;
+        }
+
+        /* Selection hint */
+        .selection-hint {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
         }
 
         /* Mobile-specific adjustments */
@@ -736,7 +745,7 @@
             <h2>Registrar and Alumni Directorate</h2>
             <div class="pink">Tikimt 3, 2018 E.C.<br />Exam Results and Placement Portal</div>
 
-            <div class="instructions">Please select the type of exam you want to check</div>
+            <div class="instructions">Click on any exam type to continue</div>
             
             <div class="exam-options">
                 <div class="exam-option" data-exam="ngat">
@@ -788,7 +797,7 @@
                 </div>
             </div>
             
-            <button id="continueBtn" disabled>Continue</button>
+            <div class="selection-hint">Click any option above to proceed</div>
             
             <div class="footer">
                 For assistance, contact the Registrar Office
@@ -828,7 +837,7 @@
             
             <div class="nav-buttons">
                 <button class="back-btn" id="backToSelectionBtn">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i> Back to Selection
                 </button>
                 <button id="searchButton">Search</button>
             </div>
@@ -889,25 +898,14 @@
             }
         });
 
-        // Page 1: Exam Selection
+        // Page 1: Direct Exam Selection (One-Click Navigation)
         const examOptions = document.querySelectorAll('.exam-option');
-        const continueBtn = document.getElementById('continueBtn');
         
         examOptions.forEach(option => {
             option.addEventListener('click', function() {
-                // Remove selected class from all options
-                examOptions.forEach(opt => opt.classList.remove('selected'));
-                // Add selected class to clicked option
-                this.classList.add('selected');
-                // Enable continue button
-                continueBtn.disabled = false;
                 // Store selected exam
                 selectedExam = this.getAttribute('data-exam');
-            });
-        });
-        
-        continueBtn.addEventListener('click', function() {
-            if (selectedExam) {
+                
                 // Update page 2 content based on selection
                 document.getElementById('page2-title').textContent = 'Jigjiga University';
                 document.getElementById('page2-subtitle').textContent = 'Registrar and Alumni Directorate';
@@ -921,7 +919,7 @@
                 
                 // Focus on username input
                 document.getElementById('usernameInput').focus();
-            }
+            });
         });
 
         // Page 2: Back button
@@ -952,8 +950,6 @@
             document.getElementById('page1').classList.add('active');
             
             // Reset selection
-            examOptions.forEach(opt => opt.classList.remove('selected'));
-            continueBtn.disabled = true;
             selectedExam = '';
         });
 
