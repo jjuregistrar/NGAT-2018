@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGAT Placement Announcement</title>
+    <title>Jigjiga University Exam Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -147,9 +147,9 @@
         .card {
             background: rgba(255, 255, 255, 0.95);
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             margin: auto;
-            padding: 25px 20px;
+            padding: 30px;
             border-radius: 15px;
             /* Enhanced shadow for depth perception */
             box-shadow: 
@@ -185,11 +185,6 @@
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
         
-        /* Optional: Add hover effect to logo */
-        .logo:hover {
-            transform: scale(1.05);
-        }
-               
         h1 {
             text-align: center;
             color: blue;
@@ -225,7 +220,7 @@
         .field-label {
             font-weight: bold;
             display: inline-block;
-            width: 120px;
+            width: 150px;
             text-align: left;
             font-family: "Times New Roman", Times, serif;
             font-size: 14px;
@@ -254,8 +249,7 @@
         }
         
         button {
-            width: 100%;
-            padding: 14px;
+            padding: 14px 25px;
             background: linear-gradient(to bottom, #007bff, #0056b3);
             color: white;
             border: none;
@@ -374,6 +368,70 @@
             line-height: 1.4;
         }
 
+        /* Exam Selection Styles */
+        .exam-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .exam-option {
+            background: rgba(249, 249, 249, 0.8);
+            border-radius: 10px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .exam-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-color: #007bff;
+        }
+
+        .exam-option.selected {
+            border-color: #007bff;
+            background: rgba(0, 123, 255, 0.05);
+        }
+
+        .exam-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        .exam-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0056b3;
+        }
+
+        .exam-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .back-btn {
+            background: linear-gradient(to bottom, #6c757d, #545b62);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(to bottom, #545b62, #3a3f44);
+        }
+
         /* Social Media Icons */
         .social-media {
             display: flex;
@@ -432,6 +490,15 @@
             font-family: "Times New Roman", Times, serif;
         }
 
+        /* Page transitions */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
         /* Mobile-specific adjustments */
         @media (max-width: 768px) {
             header {
@@ -487,6 +554,10 @@
             .main-content {
                 padding: 15px;
             }
+
+            .exam-options {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -518,7 +589,7 @@
             }
             
             .field-label {
-                width: 110px;
+                width: 130px;
                 font-size: 13px;
             }
             
@@ -528,7 +599,7 @@
             }
             
             button {
-                padding: 12px;
+                padding: 12px 20px;
                 font-size: 16px;
             }
             
@@ -562,6 +633,18 @@
             .social-text {
                 font-size: 13px;
             }
+
+            .exam-option {
+                padding: 20px 15px;
+            }
+
+            .exam-icon {
+                font-size: 35px;
+            }
+
+            .exam-title {
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -582,7 +665,7 @@
             }
             
             .field-label {
-                width: 100px;
+                width: 120px;
             }
 
             .social-media {
@@ -610,7 +693,7 @@
         <div class="header-container">
             <div class="logo-container">
                 <img src="https://i.ibb.co/0j2mgMBp/JJU-LOGO.png" alt="Jigjiga University Logo" class="header-logo" />
-                <div class="university-name">Jigjiga University<br />Registrar and Alumni Directorate</div>
+                <div class="university-name">Jigjiga University</div>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
@@ -627,23 +710,61 @@
     </header>
 
     <div class="main-content">
-        <div class="card">
+        <!-- Page 1: Exam Selection -->
+        <div class="card page active" id="page1">
             <img src="https://i.ibb.co/0j2mgMBp/JJU-LOGO.png" alt="Jigjiga University Logo" class="logo" />
             <h1>Jigjiga University</h1>
             <h2>Registrar and Alumni Directorate</h2>
-            <div class="pink">Tikimt 3, 2018 E.C.<br />NGAT Placement Announcement</div>
+            <div class="pink">Tikimt 3, 2018 E.C.<br />Exam Results and Placement Portal</div>
 
-            <div class="instructions">Enter your username to find your exam placement details</div>
+            <div class="instructions">Please select the type of exam you want to check</div>
             
-            <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
-            <button id="searchButton" onclick="searchStudent()">Search</button>
+            <div class="exam-options">
+                <div class="exam-option" data-exam="ngat">
+                    <div class="exam-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="exam-title">National Graduate Admissions Test</div>
+                    <div class="exam-description">Check your NGAT placement and exam details</div>
+                </div>
+                
+                <div class="exam-option" data-exam="exit-exam">
+                    <div class="exam-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="exam-title">Exit Exam Placement</div>
+                    <div class="exam-description">Find your exit exam placement information</div>
+                </div>
+                
+                <div class="exam-option" data-exam="remedial">
+                    <div class="exam-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="exam-title">Remedial Exam Placement</div>
+                    <div class="exam-description">Check your remedial exam placement details</div>
+                </div>
+                
+                <div class="exam-option" data-exam="exit-results">
+                    <div class="exam-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="exam-title">Exit Exam Results</div>
+                    <div class="exam-description">View your exit exam results and scores</div>
+                </div>
+                
+                <div class="exam-option" data-exam="remedial-results">
+                    <div class="exam-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="exam-title">Remedial Exam Results</div>
+                    <div class="exam-description">Check your remedial exam results</div>
+                </div>
+            </div>
             
-            <div class="loading" id="loadingIndicator">Searching for student information...</div>
-
-            <div id="result"></div>
+            <button id="continueBtn" disabled>Continue</button>
             
             <div class="footer">
-                For assistance, contact the Registrar and Alumni Directorate
+                For assistance, contact the Registrar Office
             </div>
 
             <!-- Social Media Icons Section -->
@@ -666,9 +787,65 @@
                 </a>
             </div>
         </div>
+
+        <!-- Page 2: Username Entry -->
+        <div class="card page" id="page2">
+            <img src="https://i.ibb.co/0j2mgMBp/JJU-LOGO.png" alt="Jigjiga University Logo" class="logo" />
+            <h1 id="page2-title">Jigjiga University</h1>
+            <h2 id="page2-subtitle">Registrar and Alumni Directorate</h2>
+            <div class="pink" id="page2-exam-type">Exam Placement</div>
+
+            <div class="instructions" id="page2-instructions">Enter your username to find your exam details</div>
+            
+            <input type="text" id="usernameInput" placeholder="Enter username (e.g., NGAT00000018)" />
+            
+            <div class="nav-buttons">
+                <button class="back-btn" id="backToSelectionBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button id="searchButton">Search</button>
+            </div>
+            
+            <div class="loading" id="loadingIndicator">Searching for student information...</div>
+
+            <div class="footer">
+                For assistance, contact the Registrar Office
+            </div>
+        </div>
+
+        <!-- Page 3: Results Display -->
+        <div class="card page" id="page3">
+            <img src="https://i.ibb.co/0j2mgMBp/JJU-LOGO.png" alt="Jigjiga University Logo" class="logo" />
+            <h1 id="page3-title">Jigjiga University</h1>
+            <h2 id="page3-subtitle">Registrar and Alumni Directorate</h2>
+            <div class="pink" id="page3-exam-type">Exam Results</div>
+
+            <div id="result"></div>
+            
+            <div class="nav-buttons">
+                <button class="back-btn" id="backToUsernameBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button id="newSearchBtn">New Search</button>
+            </div>
+            
+            <div class="footer">
+                For assistance, contact the Registrar Office
+            </div>
+        </div>
     </div>
 
     <script>
+        // Global variables
+        let selectedExam = '';
+        let examTitles = {
+            'ngat': 'National Graduate Admissions Test Placement',
+            'exit-exam': 'Exit Exam Placement',
+            'remedial': 'Remedial Exam Placement',
+            'exit-results': 'Exit Exam Results',
+            'remedial-results': 'Remedial Exam Results'
+        };
+
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navMenu = document.getElementById('navMenu');
@@ -682,6 +859,74 @@
             if (!event.target.closest('nav') && !event.target.closest('.mobile-menu-btn')) {
                 navMenu.classList.remove('active');
             }
+        });
+
+        // Page 1: Exam Selection
+        const examOptions = document.querySelectorAll('.exam-option');
+        const continueBtn = document.getElementById('continueBtn');
+        
+        examOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                examOptions.forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                // Enable continue button
+                continueBtn.disabled = false;
+                // Store selected exam
+                selectedExam = this.getAttribute('data-exam');
+            });
+        });
+        
+        continueBtn.addEventListener('click', function() {
+            if (selectedExam) {
+                // Update page 2 content based on selection
+                document.getElementById('page2-title').textContent = 'Jigjiga University';
+                document.getElementById('page2-subtitle').textContent = 'Registrar and Alumni Directorate';
+                document.getElementById('page2-exam-type').textContent = examTitles[selectedExam];
+                document.getElementById('page2-instructions').textContent = 
+                    `Enter your username to find your ${examTitles[selectedExam].toLowerCase()} details`;
+                
+                // Show page 2, hide page 1
+                document.getElementById('page1').classList.remove('active');
+                document.getElementById('page2').classList.add('active');
+                
+                // Focus on username input
+                document.getElementById('usernameInput').focus();
+            }
+        });
+
+        // Page 2: Back button
+        document.getElementById('backToSelectionBtn').addEventListener('click', function() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+        });
+
+        // Page 2: Search functionality
+        document.getElementById('searchButton').addEventListener('click', searchStudent);
+        
+        // Allow searching by pressing Enter key
+        document.getElementById('usernameInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchStudent();
+            }
+        });
+
+        // Page 3: Back button
+        document.getElementById('backToUsernameBtn').addEventListener('click', function() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        });
+
+        // Page 3: New Search button
+        document.getElementById('newSearchBtn').addEventListener('click', function() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+            
+            // Reset selection
+            examOptions.forEach(opt => opt.classList.remove('selected'));
+            continueBtn.disabled = true;
+            selectedExam = '';
         });
 
         async function searchStudent() {
@@ -704,7 +949,7 @@
             searchButton.textContent = 'Searching...';
             
             try {
-                // Fetch the CSV file
+                // Fetch the CSV file - in a real implementation, this would be specific to the selected exam
                 const response = await fetch('data.csv');
                 
                 if (!response.ok) {
@@ -741,49 +986,94 @@
                                 building: fields[4] ? fields[4].trim() : 'Not specified',
                                 room: fields[5] ? fields[5].trim() : 'Not specified',
                                 time: fields[6] ? fields[6].trim() : 'Not specified',
-                                session: fields[7] ? fields[7].trim() : 'Not specified'
+                                session: fields[7] ? fields[7].trim() : 'Not specified',
+                                score: fields[8] ? fields[8].trim() : 'Not available',
+                                status: fields[9] ? fields[9].trim() : 'Not available'
                             };
                             break; // Stop searching once we found the student
                         }
                     }
                 }
                 
+                // Update page 3 content
+                document.getElementById('page3-title').textContent = 'Jigjiga University';
+                document.getElementById('page3-subtitle').textContent = 'Registrar and Alumni Directorate';
+                document.getElementById('page3-exam-type').textContent = examTitles[selectedExam];
+                
                 // Display results
                 if (studentFound) {
-                    resultDiv.innerHTML = `
-                        <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
-                        <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
-                        <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
-                        <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
-                        <div class="result-item"><span class="field-label">Session:</span> ${studentFound.session}</div>
-                        <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
-                        <div class="result-item"><span class="field-label">Exam Room:</span> ${studentFound.room}</div>
-                        <div class="result-item red"><span class="field-label">Exam Time:</span> ${studentFound.time}</div>
-                    `;
+                    let resultHTML = '';
+                    
+                    if (selectedExam.includes('results')) {
+                        // For results pages, show score and status
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
+                            <div class="result-item"><span class="field-label">Score:</span> ${studentFound.score}</div>
+                            <div class="result-item ${studentFound.status === 'Pass' ? 'green' : 'red'}"><span class="field-label">Status:</span> ${studentFound.status}</div>
+                        `;
+                    } else {
+                        // For placement pages, show location details
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
+                            <div class="result-item"><span class="field-label">Session:</span> ${studentFound.session}</div>
+                            <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
+                            <div class="result-item"><span class="field-label">Exam Room:</span> ${studentFound.room}</div>
+                            <div class="result-item red"><span class="field-label">Exam Time:</span> ${studentFound.time}</div>
+                        `;
+                    }
+                    
+                    resultDiv.innerHTML = resultHTML;
                 } else {
-                    resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
+                    resultDiv.innerHTML = `<p class="red">No student found with username: ${input}</p>`;
                 }
+                
+                // Show page 3, hide page 2
+                document.getElementById('page2').classList.remove('active');
+                document.getElementById('page3').classList.add('active');
                 
             } catch (error) {
                 console.error('Error searching for student:', error);
-                resultDiv.innerHTML = `<p class="red">Error searching for student: ${error.message}</p>`;
                 
                 // Fallback to sample data if CSV loading fails
-                const sampleStudent = getSampleStudent(input);
+                const sampleStudent = getSampleStudent(input, selectedExam);
                 if (sampleStudent) {
-                    resultDiv.innerHTML = `
-                        <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
-                        <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
-                        <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
-                        <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
-                        <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
-                        <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
-                        <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
-                        <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
-                        <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
-                    `;
+                    let resultHTML = '';
+                    
+                    if (selectedExam.includes('results')) {
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item"><span class="field-label">Score:</span> ${sampleStudent.score}</div>
+                            <div class="result-item ${sampleStudent.status === 'Pass' ? 'green' : 'red'}"><span class="field-label">Status:</span> ${sampleStudent.status}</div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
+                    } else {
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
+                            <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
+                            <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
+                            <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
+                    }
+                    
+                    resultDiv.innerHTML = resultHTML;
+                    
+                    // Show page 3, hide page 2
+                    document.getElementById('page2').classList.remove('active');
+                    document.getElementById('page3').classList.add('active');
                 } else {
-                    resultDiv.innerHTML = `<p class="red">No examinee found with username: ${input}</p>`;
+                    resultDiv.innerHTML = `<p class="red">No student found with username: ${input}</p>`;
                 }
             } finally {
                 // Hide loading indicator and re-enable button
@@ -794,7 +1084,7 @@
         }
 
         // Fallback function with sample data
-        function getSampleStudent(username) {
+        function getSampleStudent(username, examType) {
             const sampleData = {
                 "NGAT00000018": {
                     username: "NGAT00000018",
@@ -804,7 +1094,9 @@
                     building: "Science Building",
                     room: "Room 101",
                     time: "9:00 AM - 11:00 AM",
-                    session: "Morning"
+                    session: "Morning",
+                    score: "85%",
+                    status: "Pass"
                 },
                 "NGAT00000019": {
                     username: "NGAT00000019",
@@ -814,7 +1106,9 @@
                     building: "Science Building",
                     room: "Room 102",
                     time: "9:00 AM - 11:00 AM",
-                    session: "Morning"
+                    session: "Morning",
+                    score: "92%",
+                    status: "Pass"
                 },
                 "NGAT00000020": {
                     username: "NGAT00000020",
@@ -824,24 +1118,38 @@
                     building: "Main Building",
                     room: "Room 201",
                     time: "2:00 PM - 4:00 PM",
-                    session: "Afternoon"
+                    session: "Afternoon",
+                    score: "78%",
+                    status: "Pass"
+                },
+                "EXIT0000001": {
+                    username: "EXIT0000001",
+                    name: "Sofia Ahmed",
+                    gender: "Female",
+                    examDate: "November 5, 2024",
+                    building: "Technology Building",
+                    room: "Room 305",
+                    time: "10:00 AM - 12:00 PM",
+                    session: "Morning",
+                    score: "88%",
+                    status: "Pass"
+                },
+                "REM0000001": {
+                    username: "REM0000001",
+                    name: "Daniel Tesfaye",
+                    gender: "Male",
+                    examDate: "December 10, 2024",
+                    building: "Main Building",
+                    room: "Room 105",
+                    time: "8:00 AM - 10:00 AM",
+                    session: "Morning",
+                    score: "65%",
+                    status: "Pass"
                 }
             };
             
             return sampleData[username] || null;
         }
-
-        // Allow searching by pressing Enter key
-        document.getElementById('usernameInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                searchStudent();
-            }
-        });
-
-        // Auto-focus on the input field when page loads
-        window.addEventListener('load', function() {
-            document.getElementById('usernameInput').focus();
-        });
     </script>
 </body>
-</html>
+    </html>
