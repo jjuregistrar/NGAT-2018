@@ -90,27 +90,13 @@
             z-index: -1;
         }
 
-        /* Logo container for better height control */
-        .logo-container {
-            margin: 0 auto 25px;
-            height: 140px; /* Increased height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-        
-        .logo {
-            height: 100%; /* Logo fills container height */
-            width: auto;
-            max-width: 100%;
-            object-fit: contain;
-            filter: 
-                drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))
-                brightness(1.05)
-                contrast(1.1);
-            transition: transform 0.3s ease;
-        }
+      .logo {
+        display: block;
+         margin: 0 auto 20px;
+        width: auto; /* Let width adjust automatically */
+        height: 120px; /* Increased from 80px */
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+      }
         
         /* Optional: Add hover effect to logo */
         .logo:hover {
