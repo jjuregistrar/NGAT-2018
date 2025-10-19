@@ -942,6 +942,8 @@
             </div>
             
             <div class="loading" id="loadingIndicator">Searching for student information...</div>
+            
+            <div id="page2-result"></div>
 
             <div class="footer">
                 For assistance, contact the Registrar and Alumni Directorate
@@ -1034,6 +1036,9 @@
                 document.getElementById('page2-instructions').textContent = 
                     `Enter your username to find your ${examTitles[selectedExam].toLowerCase()} details`;
                 
+                // Clear any previous results
+                document.getElementById('page2-result').innerHTML = '';
+                
                 // Show page 2, hide page 1
                 document.getElementById('page1').classList.remove('active');
                 document.getElementById('page2').classList.add('active');
@@ -1077,14 +1082,16 @@
         async function searchStudent() {
             const input = document.getElementById('usernameInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('result');
+            const page2ResultDiv = document.getElementById('page2-result');
             const loadingIndicator = document.getElementById('loadingIndicator');
             const searchButton = document.getElementById('searchButton');
             
             // Clear previous results
             resultDiv.innerHTML = '';
+            page2ResultDiv.innerHTML = '';
             
             if (!input) {
-                resultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
+                page2ResultDiv.innerHTML = `<p class="red">Please enter a username to search.</p>`;
                 return;
             }
             
