@@ -147,7 +147,7 @@
         .card {
             background: rgba(255, 255, 255, 0.95);
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
             padding: 30px;
             border-radius: 15px;
@@ -220,7 +220,7 @@
         .field-label {
             font-weight: bold;
             display: inline-block;
-            width: 150px;
+            width: 180px;
             text-align: left;
             font-family: "Times New Roman", Times, serif;
             font-size: 14px;
@@ -306,6 +306,12 @@
         
         .green {
             color: green;
+            font-weight: bold;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        .blue {
+            color: #0056b3;
             font-weight: bold;
             font-family: "Times New Roman", Times, serif;
         }
@@ -499,6 +505,15 @@
             display: block;
         }
 
+        /* Department placement specific styles */
+        .department-info {
+            background: rgba(0, 123, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+        }
+
         /* Mobile-specific adjustments */
         @media (max-width: 768px) {
             header {
@@ -558,6 +573,10 @@
             .exam-options {
                 grid-template-columns: 1fr;
             }
+
+            .field-label {
+                width: 140px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -589,7 +608,7 @@
             }
             
             .field-label {
-                width: 130px;
+                width: 120px;
                 font-size: 13px;
             }
             
@@ -665,7 +684,7 @@
             }
             
             .field-label {
-                width: 120px;
+                width: 110px;
             }
 
             .social-media {
@@ -759,6 +778,14 @@
                     <div class="exam-title">Remedial Exam Results</div>
                     <div class="exam-description">Check your remedial exam results</div>
                 </div>
+                
+                <div class="exam-option" data-exam="department">
+                    <div class="exam-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="exam-title">Department Placement Results</div>
+                    <div class="exam-description">View your department placement information</div>
+                </div>
             </div>
             
             <button id="continueBtn" disabled>Continue</button>
@@ -843,7 +870,8 @@
             'exit-exam': 'Exit Exam Placement',
             'remedial': 'Remedial Exam Placement',
             'exit-results': 'Exit Exam Results',
-            'remedial-results': 'Remedial Exam Results'
+            'remedial-results': 'Remedial Exam Results',
+            'department': 'Department Placement Results'
         };
 
         // Mobile menu toggle
@@ -988,7 +1016,10 @@
                                 time: fields[6] ? fields[6].trim() : 'Not specified',
                                 session: fields[7] ? fields[7].trim() : 'Not specified',
                                 score: fields[8] ? fields[8].trim() : 'Not available',
-                                status: fields[9] ? fields[9].trim() : 'Not available'
+                                status: fields[9] ? fields[9].trim() : 'Not available',
+                                department: fields[10] ? fields[10].trim() : 'Not assigned',
+                                college: fields[11] ? fields[11].trim() : 'Not assigned',
+                                program: fields[12] ? fields[12].trim() : 'Not specified'
                             };
                             break; // Stop searching once we found the student
                         }
@@ -1012,6 +1043,22 @@
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
                             <div class="result-item"><span class="field-label">Score:</span> ${studentFound.score}</div>
                             <div class="result-item ${studentFound.status === 'Pass' ? 'green' : 'red'}"><span class="field-label">Status:</span> ${studentFound.status}</div>
+                        `;
+                    } else if (selectedExam === 'department') {
+                        // For department placement, show department and program details
+                        resultHTML = `
+                            <div class="department-info">
+                                <div class="result-item blue"><span class="field-label">Congratulations!</span></div>
+                                <div class="result-item">You have been successfully placed in the following department:</div>
+                            </div>
+                            <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                            <div class="result-item"><span class="field-label">College:</span> ${studentFound.college}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>
+                            <div class="result-item"><span class="field-label">Program:</span> ${studentFound.program}</div>
+                            <div class="result-item"><span class="field-label">Placement Date:</span> ${studentFound.examDate}</div>
+                            <div class="result-item green"><span class="field-label">Status:</span> Successfully Placed</div>
                         `;
                     } else {
                         // For placement pages, show location details
@@ -1051,6 +1098,22 @@
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
                             <div class="result-item"><span class="field-label">Score:</span> ${sampleStudent.score}</div>
                             <div class="result-item ${sampleStudent.status === 'Pass' ? 'green' : 'red'}"><span class="field-label">Status:</span> ${sampleStudent.status}</div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
+                    } else if (selectedExam === 'department') {
+                        resultHTML = `
+                            <div class="department-info">
+                                <div class="result-item blue"><span class="field-label">Congratulations!</span></div>
+                                <div class="result-item">You have been successfully placed in the following department:</div>
+                            </div>
+                            <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                            <div class="result-item"><span class="field-label">College:</span> ${sampleStudent.college}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
+                            <div class="result-item"><span class="field-label">Program:</span> ${sampleStudent.program}</div>
+                            <div class="result-item"><span class="field-label">Placement Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item green"><span class="field-label">Status:</span> Successfully Placed</div>
                             <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
                         `;
                     } else {
@@ -1096,7 +1159,10 @@
                     time: "9:00 AM - 11:00 AM",
                     session: "Morning",
                     score: "85%",
-                    status: "Pass"
+                    status: "Pass",
+                    department: "Computer Science",
+                    college: "College of Informatics",
+                    program: "Regular Program"
                 },
                 "NGAT00000019": {
                     username: "NGAT00000019",
@@ -1108,7 +1174,10 @@
                     time: "9:00 AM - 11:00 AM",
                     session: "Morning",
                     score: "92%",
-                    status: "Pass"
+                    status: "Pass",
+                    department: "Business Administration",
+                    college: "College of Business and Economics",
+                    program: "Regular Program"
                 },
                 "NGAT00000020": {
                     username: "NGAT00000020",
@@ -1120,7 +1189,10 @@
                     time: "2:00 PM - 4:00 PM",
                     session: "Afternoon",
                     score: "78%",
-                    status: "Pass"
+                    status: "Pass",
+                    department: "Electrical Engineering",
+                    college: "College of Engineering and Technology",
+                    program: "Regular Program"
                 },
                 "EXIT0000001": {
                     username: "EXIT0000001",
@@ -1132,7 +1204,10 @@
                     time: "10:00 AM - 12:00 PM",
                     session: "Morning",
                     score: "88%",
-                    status: "Pass"
+                    status: "Pass",
+                    department: "Information Technology",
+                    college: "College of Informatics",
+                    program: "Regular Program"
                 },
                 "REM0000001": {
                     username: "REM0000001",
@@ -1144,7 +1219,25 @@
                     time: "8:00 AM - 10:00 AM",
                     session: "Morning",
                     score: "65%",
-                    status: "Pass"
+                    status: "Pass",
+                    department: "Civil Engineering",
+                    college: "College of Engineering and Technology",
+                    program: "Regular Program"
+                },
+                "DEPT000001": {
+                    username: "DEPT000001",
+                    name: "Elena Girma",
+                    gender: "Female",
+                    examDate: "January 15, 2025",
+                    building: "Not Applicable",
+                    room: "Not Applicable",
+                    time: "Not Applicable",
+                    session: "Not Applicable",
+                    score: "Not Applicable",
+                    status: "Placed",
+                    department: "Medicine",
+                    college: "College of Medicine and Health Sciences",
+                    program: "Regular Program"
                 }
             };
             
@@ -1152,4 +1245,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
