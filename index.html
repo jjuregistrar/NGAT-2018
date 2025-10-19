@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NGAT Placement Announcement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -288,6 +289,64 @@
             line-height: 1.4;
         }
 
+        /* Social Media Icons */
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon.facebook {
+            background: linear-gradient(135deg, #3b5998, #2d4373);
+        }
+
+        .social-icon.twitter {
+            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+        }
+
+        .social-icon.instagram {
+            background: linear-gradient(135deg, #e4405f, #c13584);
+        }
+
+        .social-icon.youtube {
+            background: linear-gradient(135deg, #cd201f, #a11715);
+        }
+
+        .social-icon.telegram {
+            background: linear-gradient(135deg, #0088cc, #006699);
+        }
+
+        .social-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+            font-family: "Times New Roman", Times, serif;
+        }
+
         /* Mobile-specific adjustments */
         @media (max-width: 480px) {
             body {
@@ -347,6 +406,21 @@
             .instructions {
                 font-size: 13px;
             }
+
+            .social-media {
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            .social-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .social-text {
+                font-size: 13px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -369,6 +443,16 @@
             .field-label {
                 width: 100px;
             }
+
+            .social-media {
+                gap: 10px;
+            }
+
+            .social-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -389,7 +473,27 @@
         <div id="result"></div>
         
         <div class="footer">
-            For assistance, contact the Registrar and Alumni Directorate
+            For assistance, contact the Registrar Office
+        </div>
+
+        <!-- Social Media Icons Section -->
+        <div class="social-text">Follow us on social media</div>
+        <div class="social-media">
+            <a href="https://facebook.com" class="social-icon facebook" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com" class="social-icon twitter" target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com" class="social-icon instagram" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://youtube.com" class="social-icon youtube" target="_blank">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://telegram.org" class="social-icon telegram" target="_blank">
+                <i class="fab fa-telegram-plane"></i>
+            </a>
         </div>
     </div>
 
