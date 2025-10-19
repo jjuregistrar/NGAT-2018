@@ -52,6 +52,12 @@
         .header-logo {
             height: 50px;
             width: auto;
+            transition: all 0.3s ease;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
 
         .university-name {
@@ -59,6 +65,13 @@
             font-weight: bold;
             color: #0056b3;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .directorate-name {
+            font-size: 14px;
+            color: #2d7d3a;
+            font-weight: bold;
+            margin-top: 2px;
         }
 
         nav ul {
@@ -183,6 +196,12 @@
             height: 100px;
             max-width: 80%;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
         }
         
         h1 {
@@ -581,6 +600,10 @@
                 font-size: 16px;
             }
             
+            .directorate-name {
+                font-size: 12px;
+            }
+            
             .header-logo {
                 height: 40px;
             }
@@ -782,6 +805,10 @@
                 font-size: 14px;
             }
             
+            .directorate-name {
+                font-size: 11px;
+            }
+            
             .header-logo {
                 height: 35px;
             }
@@ -793,7 +820,10 @@
         <div class="header-container">
             <div class="logo-container">
                 <img src="https://i.ibb.co/0j2mgMBp/JJU-LOGO.png" alt="Jigjiga University Logo" class="header-logo" />
-                <div class="university-name">Jigjiga University</div>
+                <div>
+                    <div class="university-name">Jigjiga University</div>
+                    <div class="directorate-name">Registrar and Alumni Directorate</div>
+                </div>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
@@ -815,9 +845,9 @@
             <img src="https://i.ibb.co/0j2mgMBp/JJU-LOGO.png" alt="Jigjiga University Logo" class="logo" />
             <h1>Jigjiga University</h1>
             <h2>Registrar and Alumni Directorate</h2>
-            <div class="pink">Tikimt 3, 2018 E.C.<br />Exam Results and Placement Portal</div>
+            <div class="pink">Welcome to the Exam Results and Placement Portal</div>
 
-            <div class="instructions">Click on any exam type to continue</div>
+            <div class="instructions">Please select the option below to continue..</div>
             
             <div class="exam-options">
                 <div class="exam-option" data-exam="ngat">
@@ -872,7 +902,7 @@
             <div class="selection-hint">Click any option above to proceed</div>
             
             <div class="footer">
-                For assistance, contact the Registrar Office
+                Registrar and Alumni Directorate
             </div>
 
             <!-- Social Media Icons Section -->
@@ -888,7 +918,7 @@
                     <i class="fab fa-telegram-plane"></i>
                 </a>
                 <a href="https://x.com/jigjigauniveth?t=jhQh0TZoS9m9QhtGPJSqYw&s=35" class="social-icon x-twitter" target="_blank">
-                    <i class="fab fa-x-twitter"></i>
+                    <i class="fa-brands fa-x-twitter"></i>
                 </a>
             </div>
         </div>
@@ -914,7 +944,7 @@
             <div class="loading" id="loadingIndicator">Searching for student information...</div>
 
             <div class="footer">
-                For assistance, contact the Registrar Office
+                Registrar and Alumni Directorate
             </div>
         </div>
 
@@ -935,7 +965,7 @@
             </div>
             
             <div class="footer">
-                For assistance, contact the Registrar Office
+                Registrar and Alumni Directorate
             </div>
         </div>
     </div>
