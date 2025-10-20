@@ -951,7 +951,7 @@
             <div id="validationMessage" class="validation-message"></div>
             
             <div class="password-field" id="passwordField">
-                <input type="password" id="passwordInput" placeholder="Enter password" />
+                <input type="password" id="passwordInput" placeholder="Enter password (for security verification)" />
                 <div id="passwordValidationMessage" class="validation-message"></div>
             </div>
             
@@ -1123,6 +1123,25 @@
             selectedExam = '';
         });
 
+        // Browser back button functionality
+        window.addEventListener('popstate', function(event) {
+            navigateBack();
+        });
+
+        function navigateBack() {
+            const page3 = document.getElementById('page3');
+            const page2 = document.getElementById('page2');
+            const page1 = document.getElementById('page1');
+            
+            if (page3.classList.contains('active')) {
+                page3.classList.remove('active');
+                page2.classList.add('active');
+            } else if (page2.classList.contains('active')) {
+                page2.classList.remove('active');
+                page1.classList.add('active');
+            }
+        }
+
         async function searchStudent() {
             const username = document.getElementById('usernameInput').value.trim().toUpperCase();
             const password = document.getElementById('passwordInput').value.trim();
@@ -1140,12 +1159,6 @@
             // Validation
             if (!username) {
                 validationMessage.textContent = 'Please enter a username to search.';
-                return;
-            }
-            
-            // Password validation for specific exams
-            if ((selectedExam === 'exit-exam' || selectedExam === 'remedial') && !password) {
-                passwordValidationMessage.textContent = 'Please enter your password.';
                 return;
             }
             
@@ -1185,27 +1198,22 @@
                         
                         // Check if this is the student we're looking for
                         if (fields.length >= 2 && fields[0].trim().toUpperCase() === username) {
-                            // For password-protected exams, verify password
-                            if ((selectedExam === 'exit-exam' || selectedExam === 'remedial') && 
-                                fields.length > 13 && fields[13].trim() !== password) {
-                                throw new Error('Invalid password');
-                            }
-                            
                             studentFound = {
                                 username: fields[0] ? fields[0].trim() : 'Unknown',
                                 name: fields[1] ? fields[1].trim() : 'Unknown',
                                 gender: fields[2] ? fields[2].trim() : 'Not specified',
-                                examDate: fields[3] ? fields[3].trim() : 'Not specified',
-                                building: fields[4] ? fields[4].trim() : 'Not specified',
-                                room: fields[5] ? fields[5].trim() : 'Not specified',
-                                time: fields[6] ? fields[6].trim() : 'Not specified',
-                                session: fields[7] ? fields[7].trim() : 'Not specified',
-                                score: fields[8] ? fields[8].trim() : 'Not available',
-                                status: fields[9] ? fields[9].trim() : 'Not available',
-                                department: fields[10] ? fields[10].trim() : 'Not assigned',
-                                college: fields[11] ? fields[11].trim() : 'Not assigned',
-                                program: fields[12] ? fields[12].trim() : 'Not specified',
-                                password: fields[13] ? fields[13].trim() : ''
+                                department: fields[3] ? fields[3].trim() : 'Not specified',
+                                stream: fields[4] ? fields[4].trim() : 'Not specified',
+                                examDate: fields[5] ? fields[5].trim() : 'Not specified',
+                                building: fields[6] ? fields[6].trim() : 'Not specified',
+                                room: fields[7] ? fields[7].trim() : 'Not specified',
+                                time: fields[8] ? fields[8].trim() : 'Not specified',
+                                session: fields[9] ? fields[9].trim() : 'Not specified',
+                                score: fields[10] ? fields[10].trim() : 'Not available',
+                                status: fields[11] ? fields[11].trim() : 'Not available',
+                                college: fields[12] ? fields[12].trim() : 'Not assigned',
+                                program: fields[13] ? fields[13].trim() : 'Not specified',
+                                password: fields[14] ? fields[14].trim() : ''
                             };
                             break; // Stop searching once we found the student
                         }
@@ -1215,7 +1223,15 @@
                 // Update page 3 content
                 document.getElementById('page3-title').textContent = 'Jigjiga University';
                 document.getElementById('page3-subtitle').textContent = 'Registrar and Alumni Directorate';
-                document.getElementById('page3-exam-type').textContent = examTitles[selectedExam];
+                
+                // Set specific titles for different exam types
+                if (selectedExam === 'exit-results') {
+                    document.getElementById('page3-exam-type').textContent = 'Exit Exam Results';
+                } else if (selectedExam === 'remedial-results') {
+                    document.getElementById('page3-exam-type').textContent = 'Remedial Exam Results';
+                } else {
+                    document.getElementById('page3-exam-type').textContent = examTitles[selectedExam];
+                }
                 
                 // Display results
                 if (studentFound) {
@@ -1223,12 +1239,28 @@
                     
                     if (selectedExam.includes('results')) {
                         // For results pages, show score and status
+                        const statusClass = studentFound.status === 'Pass' ? 'green' : 'red';
+                        
                         resultHTML = `
                             <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
+                        `;
+                        
+                        // Add Department for Exit Exam Results
+                        if (selectedExam === 'exit-results') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>`;
+                        }
+                        
+                        // Add Stream for Remedial Exam Results
+                        if (selectedExam === 'remedial-results') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>`;
+                        }
+                        
+                        resultHTML += `
+                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
                             <div class="result-item"><span class="field-label">Score:</span> ${studentFound.score}</div>
-                            <div class="result-item ${studentFound.status === 'Pass' ? 'green' : 'red'}"><span class="field-label">Status:</span> ${studentFound.status}</div>
+                            <div class="result-item ${statusClass}"><span class="field-label">Status:</span> ${studentFound.status}</div>
                         `;
                     } else if (selectedExam === 'department') {
                         // For department placement, show department and program details with score
@@ -1253,6 +1285,15 @@
                             <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
                             <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>
+                        `;
+                        
+                        // Add Stream for Remedial Exam Placement
+                        if (selectedExam === 'remedial') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>`;
+                        }
+                        
+                        resultHTML += `
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
                             <div class="result-item"><span class="field-label">Session:</span> ${studentFound.session}</div>
                             <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
@@ -1266,6 +1307,7 @@
                             <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
                             <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
                             <div class="result-item"><span class="field-label">Session:</span> ${studentFound.session}</div>
                             <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
@@ -1283,79 +1325,107 @@
                 document.getElementById('page2').classList.remove('active');
                 document.getElementById('page3').classList.add('active');
                 
+                // Add to browser history for back button functionality
+                window.history.pushState({page: 'results'}, '', '#results');
+                
             } catch (error) {
                 console.error('Error searching for student:', error);
                 
-                // Handle specific errors
-                if (error.message === 'Invalid password') {
-                    passwordValidationMessage.textContent = 'Invalid password. Please try again.';
-                } else {
-                    // Fallback to sample data if CSV loading fails
-                    const sampleStudent = getSampleStudent(username, selectedExam, password);
-                    if (sampleStudent) {
-                        let resultHTML = '';
+                // Fallback to sample data if CSV loading fails
+                const sampleStudent = getSampleStudent(username, selectedExam, password);
+                if (sampleStudent) {
+                    let resultHTML = '';
+                    
+                    if (selectedExam.includes('results')) {
+                        // For results pages, show score and status
+                        const statusClass = sampleStudent.status === 'Pass' ? 'green' : 'red';
                         
-                        if (selectedExam.includes('results')) {
-                            resultHTML = `
-                                <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
-                                <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
-                                <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
-                                <div class="result-item"><span class="field-label">Score:</span> ${sampleStudent.score}</div>
-                                <div class="result-item ${sampleStudent.status === 'Pass' ? 'green' : 'red'}"><span class="field-label">Status:</span> ${sampleStudent.status}</div>
-                                <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
-                            `;
-                        } else if (selectedExam === 'department') {
-                            resultHTML = `
-                                <div class="department-info">
-                                    <div class="result-item blue"><span class="field-label">Congratulations!</span></div>
-                                    <div class="result-item">You have been successfully placed in the following department:</div>
-                                </div>
-                                <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
-                                <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
-                                <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
-                                <div class="result-item"><span class="field-label">College:</span> ${sampleStudent.college}</div>
-                                <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
-                                <div class="result-item"><span class="field-label">Program:</span> ${sampleStudent.program}</div>
-                                <div class="result-item"><span class="field-label">Placement Score:</span> ${sampleStudent.score}</div>
-                                <div class="result-item"><span class="field-label">Placement Date:</span> ${sampleStudent.examDate}</div>
-                                <div class="result-item green"><span class="field-label">Status:</span> Successfully Placed</div>
-                                <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
-                            `;
-                        } else if (selectedExam === 'exit-exam' || selectedExam === 'remedial') {
-                            resultHTML = `
-                                <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
-                                <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
-                                <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
-                                <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
-                                <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
-                                <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
-                                <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
-                                <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
-                                <div class="result-item"><span class="field-label">Password Verified:</span> <span class="green">Yes</span></div>
-                                <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
-                            `;
-                        } else {
-                            resultHTML = `
-                                <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
-                                <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
-                                <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
-                                <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
-                                <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
-                                <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
-                                <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
-                                <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
-                                <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
-                            `;
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                        `;
+                        
+                        // Add Department for Exit Exam Results
+                        if (selectedExam === 'exit-results') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>`;
                         }
                         
-                        resultDiv.innerHTML = resultHTML;
+                        // Add Stream for Remedial Exam Results
+                        if (selectedExam === 'remedial-results') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${sampleStudent.stream}</div>`;
+                        }
                         
-                        // Show page 3, hide page 2
-                        document.getElementById('page2').classList.remove('active');
-                        document.getElementById('page3').classList.add('active');
+                        resultHTML += `
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item"><span class="field-label">Score:</span> ${sampleStudent.score}</div>
+                            <div class="result-item ${statusClass}"><span class="field-label">Status:</span> ${sampleStudent.status}</div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
+                    } else if (selectedExam === 'department') {
+                        resultHTML = `
+                            <div class="department-info">
+                                <div class="result-item blue"><span class="field-label">Congratulations!</span></div>
+                                <div class="result-item">You have been successfully placed in the following department:</div>
+                            </div>
+                            <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                            <div class="result-item"><span class="field-label">College:</span> ${sampleStudent.college}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
+                            <div class="result-item"><span class="field-label">Program:</span> ${sampleStudent.program}</div>
+                            <div class="result-item"><span class="field-label">Placement Score:</span> ${sampleStudent.score}</div>
+                            <div class="result-item"><span class="field-label">Placement Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item green"><span class="field-label">Status:</span> Successfully Placed</div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
+                    } else if (selectedExam === 'exit-exam' || selectedExam === 'remedial') {
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
+                        `;
+                        
+                        // Add Stream for Remedial Exam Placement
+                        if (selectedExam === 'remedial') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${sampleStudent.stream}</div>`;
+                        }
+                        
+                        resultHTML += `
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
+                            <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
+                            <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
+                            <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
+                            <div class="result-item"><span class="field-label">Password Verified:</span> <span class="green">Yes</span></div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
                     } else {
-                        resultDiv.innerHTML = `<p class="red">No student found with username: ${username}</p>`;
+                        resultHTML = `
+                            <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
+                            <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                            <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
+                            <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
+                            <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
+                            <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
+                            <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
+                            <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
+                            <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
+                        `;
                     }
+                    
+                    resultDiv.innerHTML = resultHTML;
+                    
+                    // Show page 3, hide page 2
+                    document.getElementById('page2').classList.remove('active');
+                    document.getElementById('page3').classList.add('active');
+                    
+                    // Add to browser history for back button functionality
+                    window.history.pushState({page: 'results'}, '', '#results');
+                } else {
+                    resultDiv.innerHTML = `<p class="red">No student found with username: ${username}</p>`;
                 }
             } finally {
                 // Hide loading indicator and re-enable button
@@ -1372,6 +1442,8 @@
                     username: "NGAT00000018",
                     name: "Ahmed Mohammed",
                     gender: "Male",
+                    department: "Computer Science",
+                    stream: "Natural Science",
                     examDate: "October 15, 2024",
                     building: "Science Building",
                     room: "Room 101",
@@ -1379,7 +1451,6 @@
                     session: "Morning",
                     score: "85%",
                     status: "Pass",
-                    department: "Computer Science",
                     college: "College of Informatics",
                     program: "Regular Program",
                     password: "ngat123"
@@ -1388,6 +1459,8 @@
                     username: "NGAT00000019",
                     name: "Fatima Hassan",
                     gender: "Female",
+                    department: "Business Administration",
+                    stream: "Social Science",
                     examDate: "October 15, 2024",
                     building: "Science Building",
                     room: "Room 102",
@@ -1395,7 +1468,6 @@
                     session: "Morning",
                     score: "92%",
                     status: "Pass",
-                    department: "Business Administration",
                     college: "College of Business and Economics",
                     program: "Regular Program",
                     password: "ngat456"
@@ -1404,6 +1476,8 @@
                     username: "EXIT0000001",
                     name: "Sofia Ahmed",
                     gender: "Female",
+                    department: "Information Technology",
+                    stream: "Natural Science",
                     examDate: "November 5, 2024",
                     building: "Technology Building",
                     room: "Room 305",
@@ -1411,15 +1485,33 @@
                     session: "Morning",
                     score: "88%",
                     status: "Pass",
-                    department: "Information Technology",
                     college: "College of Informatics",
                     program: "Regular Program",
                     password: "exit123"
+                },
+                "EXIT0000002": {
+                    username: "EXIT0000002",
+                    name: "John Doe",
+                    gender: "Male",
+                    department: "Civil Engineering",
+                    stream: "Natural Science",
+                    examDate: "November 5, 2024",
+                    building: "Engineering Building",
+                    room: "Room 205",
+                    time: "10:00 AM - 12:00 PM",
+                    session: "Morning",
+                    score: "45%",
+                    status: "Fail",
+                    college: "College of Engineering",
+                    program: "Regular Program",
+                    password: "exit456"
                 },
                 "REM0000001": {
                     username: "REM0000001",
                     name: "Daniel Tesfaye",
                     gender: "Male",
+                    department: "Civil Engineering",
+                    stream: "Natural Science",
                     examDate: "December 10, 2024",
                     building: "Main Building",
                     room: "Room 105",
@@ -1427,15 +1519,33 @@
                     session: "Morning",
                     score: "65%",
                     status: "Pass",
-                    department: "Civil Engineering",
                     college: "College of Engineering and Technology",
                     program: "Regular Program",
                     password: "rem123"
+                },
+                "REM0000002": {
+                    username: "REM0000002",
+                    name: "Anna Smith",
+                    gender: "Female",
+                    department: "Biology",
+                    stream: "Natural Science",
+                    examDate: "December 10, 2024",
+                    building: "Science Building",
+                    room: "Room 110",
+                    time: "8:00 AM - 10:00 AM",
+                    session: "Morning",
+                    score: "38%",
+                    status: "Fail",
+                    college: "College of Natural Sciences",
+                    program: "Regular Program",
+                    password: "rem456"
                 },
                 "DEPT000001": {
                     username: "DEPT000001",
                     name: "Elena Girma",
                     gender: "Female",
+                    department: "Medicine",
+                    stream: "Natural Science",
                     examDate: "January 15, 2025",
                     building: "Not Applicable",
                     room: "Not Applicable",
@@ -1443,7 +1553,6 @@
                     session: "Not Applicable",
                     score: "92.5%",
                     status: "Placed",
-                    department: "Medicine",
                     college: "College of Medicine and Health Sciences",
                     program: "Regular Program",
                     password: "dept123"
@@ -1451,11 +1560,6 @@
             };
             
             const student = sampleData[username];
-            
-            // For password-protected exams, verify password
-            if (student && (examType === 'exit-exam' || examType === 'remedial') && student.password !== password) {
-                return null;
-            }
             
             return student || null;
         }
