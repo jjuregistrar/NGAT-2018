@@ -1054,6 +1054,8 @@
         document.getElementById('homeLink').addEventListener('click', function(e) {
             e.preventDefault();
             showPage('page1');
+            // Scroll to top of the page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         document.getElementById('aboutLink').addEventListener('click', function(e) {
@@ -1318,6 +1320,11 @@
                             <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
                         `;
                         
+                        // Add Department for Exit Exam Placement
+                        if (selectedExam === 'exit-exam') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>`;
+                        }
+                        
                         // Add Stream for Remedial Exam Placement (but not Department)
                         if (selectedExam === 'remedial') {
                             resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>`;
@@ -1417,6 +1424,11 @@
                         resultHTML += `
                             <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
                         `;
+                        
+                        // Add Department for Exit Exam Placement
+                        if (selectedExam === 'exit-exam') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>`;
+                        }
                         
                         // Add Stream for Remedial Exam Placement (but not Department)
                         if (selectedExam === 'remedial') {
