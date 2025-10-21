@@ -844,8 +844,8 @@
             </button>
             <nav>
                 <ul id="navMenu">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
+                    <li><a href="#" id="homeLink">Home</a></li>
+                    <li><a href="#" id="aboutLink">About Us</a></li>
                     <li><a href="#" class="nav-button">Login</a></li>
                     <li><a href="#" class="nav-button">Sign Up</a></li>
                 </ul>
@@ -992,7 +992,7 @@
     </div>
 
     <!-- Site Footer -->
-    <footer class="site-footer">
+    <footer class="site-footer" id="siteFooter">
         <div class="footer-container">
             <div class="footer-section">
                 <div class="footer-title">Registrar and Alumni Directorate</div>
@@ -1050,6 +1050,17 @@
             }
         });
 
+        // Navigation links
+        document.getElementById('homeLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage('page1');
+        });
+
+        document.getElementById('aboutLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('siteFooter').scrollIntoView({ behavior: 'smooth' });
+        });
+
         // Page 1: Direct Exam Selection (One-Click Navigation)
         const examOptions = document.querySelectorAll('.exam-option');
         
@@ -1067,8 +1078,9 @@
                 
                 // Show/hide password field based on selection
                 const passwordField = document.getElementById('passwordField');
+                // Remove password field for Exit Exam Placement and Remedial Exam Placement
                 if (selectedExam === 'exit-exam' || selectedExam === 'remedial') {
-                    passwordField.style.display = 'block';
+                    passwordField.style.display = 'none';
                 } else {
                     passwordField.style.display = 'none';
                 }
@@ -1078,8 +1090,7 @@
                 document.getElementById('passwordValidationMessage').textContent = '';
                 
                 // Show page 2, hide page 1
-                document.getElementById('page1').classList.remove('active');
-                document.getElementById('page2').classList.add('active');
+                showPage('page2');
                 
                 // Focus on username input
                 document.getElementById('usernameInput').focus();
@@ -1088,8 +1099,7 @@
 
         // Page 2: Back button
         document.getElementById('backToSelectionBtn').addEventListener('click', function() {
-            document.getElementById('page2').classList.remove('active');
-            document.getElementById('page1').classList.add('active');
+            showPage('page1');
         });
 
         // Page 2: Search functionality
@@ -1110,14 +1120,12 @@
 
         // Page 3: Back button
         document.getElementById('backToUsernameBtn').addEventListener('click', function() {
-            document.getElementById('page3').classList.remove('active');
-            document.getElementById('page2').classList.add('active');
+            showPage('page2');
         });
 
         // Page 3: New Search button
         document.getElementById('newSearchBtn').addEventListener('click', function() {
-            document.getElementById('page3').classList.remove('active');
-            document.getElementById('page1').classList.add('active');
+            showPage('page1');
             
             // Reset selection
             selectedExam = '';
@@ -1128,19 +1136,34 @@
             navigateBack();
         });
 
+        // Page navigation function
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add to browser history
+            window.history.pushState({page: pageId}, '', `#${pageId}`);
+        }
+
         function navigateBack() {
             const page3 = document.getElementById('page3');
             const page2 = document.getElementById('page2');
             const page1 = document.getElementById('page1');
             
             if (page3.classList.contains('active')) {
-                page3.classList.remove('active');
-                page2.classList.add('active');
+                showPage('page2');
             } else if (page2.classList.contains('active')) {
-                page2.classList.remove('active');
-                page1.classList.add('active');
+                showPage('page1');
             }
         }
+
+        // Initialize browser history
+        window.history.replaceState({page: 'page1'}, '', '#page1');
 
         async function searchStudent() {
             const username = document.getElementById('usernameInput').value.trim().toUpperCase();
@@ -1247,6 +1270,11 @@
                             <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
                         `;
                         
+                        // Add Department for Exit Exam Results
+                        if (selectedExam === 'exit-results') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>`;
+                        }
+                        
                         // Add Stream for Remedial Exam Results
                         if (selectedExam === 'remedial-results') {
                             resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>`;
@@ -1275,15 +1303,22 @@
                             <div class="result-item green"><span class="field-label">Status:</span> Successfully Placed</div>
                         `;
                     } else if (selectedExam === 'exit-exam' || selectedExam === 'remedial') {
-                        // For placement pages with password, show location details
+                        // For placement pages, show location details
                         resultHTML = `
                             <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
-                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
-                            <div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>
                         `;
                         
-                        // Add Stream for Remedial Exam Placement
+                        // Add Password for Exit Exam Placement and Remedial Exam Placement
+                        if (selectedExam === 'exit-exam' || selectedExam === 'remedial') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Password:</span> ${studentFound.password}</div>`;
+                        }
+                        
+                        resultHTML += `
+                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
+                        `;
+                        
+                        // Add Stream for Remedial Exam Placement (but not Department)
                         if (selectedExam === 'remedial') {
                             resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${studentFound.stream}</div>`;
                         }
@@ -1296,12 +1331,11 @@
                             <div class="result-item red"><span class="field-label">Exam Time:</span> ${studentFound.time}</div>
                         `;
                     } else {
-                        // For other placement pages, show location details
+                        // For other placement pages (like NGAT), show location details without Department
                         resultHTML = `
                             <div class="result-item"><span class="field-label">Examinee Name:</span> ${studentFound.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
                             <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
-                            <div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
                             <div class="result-item"><span class="field-label">Session:</span> ${studentFound.session}</div>
                             <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
@@ -1316,11 +1350,7 @@
                 }
                 
                 // Show page 3, hide page 2
-                document.getElementById('page2').classList.remove('active');
-                document.getElementById('page3').classList.add('active');
-                
-                // Add to browser history for back button functionality
-                window.history.pushState({page: 'results'}, '', '#results');
+                showPage('page3');
                 
             } catch (error) {
                 console.error('Error searching for student:', error);
@@ -1339,6 +1369,11 @@
                             <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
                             <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
                         `;
+                        
+                        // Add Department for Exit Exam Results
+                        if (selectedExam === 'exit-results') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>`;
+                        }
                         
                         // Add Stream for Remedial Exam Results
                         if (selectedExam === 'remedial-results') {
@@ -1372,11 +1407,18 @@
                         resultHTML = `
                             <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
-                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
-                            <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
                         `;
                         
-                        // Add Stream for Remedial Exam Placement
+                        // Add Password for Exit Exam Placement and Remedial Exam Placement
+                        if (selectedExam === 'exit-exam' || selectedExam === 'remedial') {
+                            resultHTML += `<div class="result-item"><span class="field-label">Password:</span> ${sampleStudent.password}</div>`;
+                        }
+                        
+                        resultHTML += `
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
+                        `;
+                        
+                        // Add Stream for Remedial Exam Placement (but not Department)
                         if (selectedExam === 'remedial') {
                             resultHTML += `<div class="result-item"><span class="field-label">Stream:</span> ${sampleStudent.stream}</div>`;
                         }
@@ -1394,7 +1436,6 @@
                             <div class="result-item"><span class="field-label">Examinee Name:</span> ${sampleStudent.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
                             <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
-                            <div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
                             <div class="result-item"><span class="field-label">Session:</span> ${sampleStudent.session}</div>
                             <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
@@ -1407,11 +1448,7 @@
                     resultDiv.innerHTML = resultHTML;
                     
                     // Show page 3, hide page 2
-                    document.getElementById('page2').classList.remove('active');
-                    document.getElementById('page3').classList.add('active');
-                    
-                    // Add to browser history for back button functionality
-                    window.history.pushState({page: 'results'}, '', '#results');
+                    showPage('page3');
                 } else {
                     resultDiv.innerHTML = `<p class="red">No student found with username: ${username}</p>`;
                 }
