@@ -1244,12 +1244,8 @@
                         resultHTML = `
                             <div class="result-item"><span class="field-label">Student Name:</span> ${studentFound.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${studentFound.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
                         `;
-                        
-                        // Add Department for Exit Exam Results
-                        if (selectedExam === 'exit-results') {
-                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${studentFound.department}</div>`;
-                        }
                         
                         // Add Stream for Remedial Exam Results
                         if (selectedExam === 'remedial-results') {
@@ -1257,7 +1253,6 @@
                         }
                         
                         resultHTML += `
-                            <div class="result-item"><span class="field-label">Gender:</span> ${studentFound.gender}</div>
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${studentFound.examDate}</div>
                             <div class="result-item"><span class="field-label">Score:</span> ${studentFound.score}</div>
                             <div class="result-item ${statusClass}"><span class="field-label">Status:</span> ${studentFound.status}</div>
@@ -1299,7 +1294,6 @@
                             <div class="result-item"><span class="field-label">Exam Building:</span> ${studentFound.building}</div>
                             <div class="result-item"><span class="field-label">Exam Room:</span> ${studentFound.room}</div>
                             <div class="result-item red"><span class="field-label">Exam Time:</span> ${studentFound.time}</div>
-                            <div class="result-item"><span class="field-label">Password Verified:</span> <span class="green">Yes</span></div>
                         `;
                     } else {
                         // For other placement pages, show location details
@@ -1343,12 +1337,8 @@
                         resultHTML = `
                             <div class="result-item"><span class="field-label">Student Name:</span> ${sampleStudent.name}</div>
                             <div class="result-item"><span class="field-label">Username:</span> ${sampleStudent.username}</div>
+                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
                         `;
-                        
-                        // Add Department for Exit Exam Results
-                        if (selectedExam === 'exit-results') {
-                            resultHTML += `<div class="result-item"><span class="field-label">Department:</span> ${sampleStudent.department}</div>`;
-                        }
                         
                         // Add Stream for Remedial Exam Results
                         if (selectedExam === 'remedial-results') {
@@ -1356,7 +1346,6 @@
                         }
                         
                         resultHTML += `
-                            <div class="result-item"><span class="field-label">Gender:</span> ${sampleStudent.gender}</div>
                             <div class="result-item"><span class="field-label">Exam Date:</span> ${sampleStudent.examDate}</div>
                             <div class="result-item"><span class="field-label">Score:</span> ${sampleStudent.score}</div>
                             <div class="result-item ${statusClass}"><span class="field-label">Status:</span> ${sampleStudent.status}</div>
@@ -1398,7 +1387,6 @@
                             <div class="result-item"><span class="field-label">Exam Building:</span> ${sampleStudent.building}</div>
                             <div class="result-item"><span class="field-label">Exam Room:</span> ${sampleStudent.room}</div>
                             <div class="result-item red"><span class="field-label">Exam Time:</span> ${sampleStudent.time}</div>
-                            <div class="result-item"><span class="field-label">Password Verified:</span> <span class="green">Yes</span></div>
                             <p style="color: orange; margin-top: 10px; font-size: 12px;">Note: Using sample data - CSV file not accessible</p>
                         `;
                     } else {
