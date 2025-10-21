@@ -248,7 +248,7 @@
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 14px;
-            margin: 15px 0;
+            margin: 15px 0 5px 0;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-family: "Times New Roman", Times, serif;
@@ -544,6 +544,7 @@
             margin: 5px 0 15px;
             text-align: left;
             font-weight: bold;
+            min-height: 20px;
         }
 
         /* Password field */
@@ -1249,7 +1250,7 @@
                 document.getElementById('page3-title').textContent = 'Jigjiga University';
                 document.getElementById('page3-subtitle').textContent = 'Registrar and Alumni Directorate';
                 
-                // Set specific titles for different exam types
+                // Set STATIC titles for specific exam types
                 if (selectedExam === 'exit-results') {
                     document.getElementById('page3-exam-type').textContent = 'Exit Exam Results';
                 } else if (selectedExam === 'remedial-results') {
@@ -1352,12 +1353,19 @@
                     }
                     
                     resultDiv.innerHTML = resultHTML;
+                    
+                    // Show page 3, hide page 2
+                    showPage('page3');
                 } else {
-                    resultDiv.innerHTML = `<p class="red">No student found with username: ${username}</p>`;
+                    // Show error message on Page 2 (not on Page 3)
+                    validationMessage.textContent = `No student found with username: ${username}`;
+                    
+                    // Hide loading indicator and re-enable button
+                    loadingIndicator.style.display = 'none';
+                    searchButton.disabled = false;
+                    searchButton.textContent = 'Search';
+                    return;
                 }
-                
-                // Show page 3, hide page 2
-                showPage('page3');
                 
             } catch (error) {
                 console.error('Error searching for student:', error);
@@ -1462,7 +1470,8 @@
                     // Show page 3, hide page 2
                     showPage('page3');
                 } else {
-                    resultDiv.innerHTML = `<p class="red">No student found with username: ${username}</p>`;
+                    // Show error message on Page 2 (not on Page 3)
+                    validationMessage.textContent = `No student found with username: ${username}`;
                 }
             } finally {
                 // Hide loading indicator and re-enable button
